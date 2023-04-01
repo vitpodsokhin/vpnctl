@@ -120,23 +120,3 @@ class VPN:
                 self.pool.unallocate_address(address)
                 return True
         raise ValueError("Peer address not found.")
-
-    #TODO cryptokey manipulation must be implemented here
-    # def connect_peer(self, address: str):
-    #     for peer in self.peers:
-    #         if peer['address'] == address:
-    #             if peer['connected']:
-    #                 raise ValueError("Peer is already connected.")
-    #             peer['connected'] = True
-    #             return True
-    #     raise ValueError("Peer address not found.")
-
-    # def disconnect_peer(self, address: str):
-    #     for peer in self.peers:
-    #         if peer['address'] == address:
-    #             if not peer['connected']:
-    #                 raise ValueError("Peer is already disconnected.")
-    #             peer['connected'] = False
-    #             return True
-    #     raise ValueError("Peer address not found.")
-
