@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import ipaddress
-from pprint import pprint
 
 class Pool(ipaddress.IPv4Network):
     def __init__(self, address_space: ipaddress.IPv4Network, hosts_num: int = 0, *args, **kwargs):
@@ -92,10 +91,14 @@ class Pool(ipaddress.IPv4Network):
                 return True
         except (IndexError, Exception) as e:
             raise e
-        
 
 
 class VPN:
+    class Peer(ipaddress.IPv4Address):
+        def __init__(self, address: object) -> None:
+            super().__init__(address)
+            pass
+
     def __init__(self, address_space):
         self.pool = Pool(address_space)
         self.peers = []
@@ -118,20 +121,22 @@ class VPN:
                 return True
         raise ValueError("Peer address not found.")
 
-    def connect_peer(self, address: str):
-        for peer in self.peers:
-            if peer['address'] == address:
-                if peer['connected']:
-                    raise ValueError("Peer is already connected.")
-                peer['connected'] = True
-                return True
-        raise ValueError("Peer address not found.")
+    #TODO cryptokey manipulation must be implemented here
+    # def connect_peer(self, address: str):
+    #     for peer in self.peers:
+    #         if peer['address'] == address:
+    #             if peer['connected']:
+    #                 raise ValueError("Peer is already connected.")
+    #             peer['connected'] = True
+    #             return True
+    #     raise ValueError("Peer address not found.")
 
-    def disconnect_peer(self, address: str):
-        for peer in self.peers:
-            if peer['address'] == address:
-                if not peer['connected']:
-                    raise ValueError("Peer is already disconnected.")
-                peer['connected'] = False
-                return True
-        raise ValueError("Peer address not found.")
+    # def disconnect_peer(self, address: str):
+    #     for peer in self.peers:
+    #         if peer['address'] == address:
+    #             if not peer['connected']:
+    #                 raise ValueError("Peer is already disconnected.")
+    #             peer['connected'] = False
+    #             return True
+    #     raise ValueError("Peer address not found.")
+
