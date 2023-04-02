@@ -24,15 +24,15 @@ class VPN:
             self.vpn = vpn
 
     def __init__(self, address_space, endpoint=False):
-        self.pool = Pool(address_space)
-        self.network = self.pool.exploded
+        self.pool: Pool = Pool(address_space)
+        self.network: str = self.pool.exploded
         self.endpoints = []
         self.peers = []
         if endpoint:
-            self.endpoints.append(self.add_peer(endpoint=endpoint).endpoint.exploded)
+            self.add_peer(endpoint=endpoint)
 
     def __repr__(self):
-        return f"VPN(network={self.network}, endpoints={[self.endpoints]}, peers={repr(self.peers)}, left_in_pool={len(self.pool.unallocated_addresses)})"
+        return f"VPN(network={self.network}, endpoints={self.endpoints}, peers={repr(self.peers)}, left_in_pool={len(self.pool.unallocated_addresses)})"
 
     def add_peer(self, address=None, endpoint=False):
         if address is not None:
@@ -41,6 +41,8 @@ class VPN:
                 raise ValueError(f"Error: Address {address} is already allocated.")
         peer = self.Peer(self.pool.allocate_address(address), endpoint=endpoint)
         self.peers.append(peer)
+        if peer.is_router:
+            self.endpoints.append(peer.endpoint.exploded)
         return peer
 
     def remove_peer(self, address=None):
@@ -56,12 +58,14 @@ class VPN:
                     if peer.address == address:
                         self.pool.unallocate_address(address)
                         self.peers.remove(peer)
+                        self.endpoints.remove(peer.endpoint)
                         break
         except (ValueError, IndexError) as e:
             raise e
 
     def to_json(self):
         json_dict = {
+            "endpoints": [],
             "peers": [],
             "pool": {
                 "address_space": self.pool.exploded,
@@ -87,7 +91,6 @@ class VPN:
             endpoint = peer_dict["endpoint"]
             is_router = peer_dict["is_router"]
             if is_router:
-                #TODO try to fix an error here, please
                 peer = VPN.Router(vpn, address=address, endpoint=endpoint)
             else:
                 peer = VPN.Peer(address=address, endpoint=None)

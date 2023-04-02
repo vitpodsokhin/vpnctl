@@ -4,8 +4,8 @@ class Pool(ipaddress.IPv4Network):
     '''The Pool is a low-level class for the address space allocation functionality.'''
     def __init__(self, address_space: str, hosts_num: int = 0, *args, **kwargs):
         #TODO implement memory friendly mechanism for address allocation
-        # refactor unallocated_addresses from list to generator
         # for cases when bitmask of the network is less than 24
+        # refactor unallocated_addresses from list to generator
         try:
             super().__init__(address_space, *args, **kwargs)
             if hosts_num == 0:
@@ -27,8 +27,7 @@ class Pool(ipaddress.IPv4Network):
         try:
             return (
                 f"Pool("
-                f"total={self.num_addresses-2}, "
-                f"left={len(self.unallocated_addresses)}, "
+                f"total={self.num_addresses-2}, left={len(self.unallocated_addresses)}, "
                 f"allocated_addresses={[str(a) for a in self.allocated_addresses]}"
                 # f"unallocated_addresses={[str(a) for a in self.unallocated_addresses]}"
                 f")"
@@ -61,7 +60,10 @@ class Pool(ipaddress.IPv4Network):
                 src_list = self.allocated_addresses if func.__name__ == 'unallocate_address' else self.unallocated_addresses
                 dst_list = self.unallocated_addresses if func.__name__ == 'unallocate_address' else self.allocated_addresses
                 if address not in src_list:
-                    raise ValueError(f"Error: Address {address} is not {'allocated' if func.__name__ == 'unallocate_address' else 'available'}.")
+                    raise ValueError(
+                        f"Error: Address {address} is not "
+                        f"{'allocated' if func.__name__ == 'unallocate_address' else 'available'}."
+                    )
                 src_list.remove(address)
                 dst_list.append(address)
                 self._sort_spaces()
