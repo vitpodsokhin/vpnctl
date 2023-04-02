@@ -1,9 +1,11 @@
 import ipaddress
 
 class Pool(ipaddress.IPv4Network):
+    '''The Pool is a low-level class for the address space allocation functionality.'''
     def __init__(self, address_space: str, hosts_num: int = 0, *args, **kwargs):
         #TODO implement memory friendly mechanism for address allocation
-        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
+        # refactor unallocated_addresses from list to generator
+        # for cases when bitmask of the network is less than 24
         try:
             super().__init__(address_space, *args, **kwargs)
             if hosts_num == 0:
@@ -13,28 +15,29 @@ class Pool(ipaddress.IPv4Network):
                 self.allocated_addresses = list(self.hosts())[:hosts_num]
                 self.unallocated_addresses = list(self.hosts())[hosts_num:]
             else:
-                raise ValueError(f"Error: The number of requested hosts ({hosts_num}) exceeds the number of available hosts in the address space ({len(self.hosts_list)}).")
+                raise ValueError(
+                    f"Error: The number of requested hosts ({hosts_num}) exceeds "
+                    f"the number of available hosts in the address space ({self.num_addresses})."
+                )
         except ValueError as e:
             raise e
 
     def __repr__(self) -> str:
-        #TODO implement memory friendly mechanism for address allocation
-        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
+        #TODO See implement memory friendly mechanism for address allocation
         try:
             return (
                 f"Pool("
                 f"total={self.num_addresses-2}, "
                 f"left={len(self.unallocated_addresses)}, "
-                f"allocated_addresses={[str(a) for a in self.allocated_addresses]}, "
-                f"unallocated_addresses={[str(a) for a in self.unallocated_addresses]}"
+                f"allocated_addresses={[str(a) for a in self.allocated_addresses]}"
+                # f"unallocated_addresses={[str(a) for a in self.unallocated_addresses]}"
                 f")"
             )
         except Exception as e:
             raise e
     
     def _sort_spaces(self):
-        #TODO implement memory friendly mechanism for address allocation
-        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
+        #TODO See implement memory friendly mechanism for address allocation
         try:
             self.allocated_addresses.sort()
             self.unallocated_addresses.sort()
@@ -42,8 +45,7 @@ class Pool(ipaddress.IPv4Network):
             raise e
 
     def relocate_address(func):
-        #TODO implement memory friendly mechanism for address allocation
-        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
+        #TODO See implement memory friendly mechanism for address allocation
         def wrapper(self, address: ... = None):
             try:
                 if address is None:
@@ -71,8 +73,7 @@ class Pool(ipaddress.IPv4Network):
 
     @relocate_address
     def allocate_address(self, address=None):
-        #TODO implement memory friendly mechanism for address allocation
-        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
+        #TODO See implement memory friendly mechanism for address allocation
         try:
             if address is None:
                 if not self.unallocated_addresses:
@@ -88,8 +89,7 @@ class Pool(ipaddress.IPv4Network):
 
     @relocate_address
     def unallocate_address(self, address=None):
-        #TODO implement memory friendly mechanism for address allocation
-        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
+        #TODO See implement memory friendly mechanism for address allocation
         try:
             if address is None:
                 if not self.allocated_addresses:
