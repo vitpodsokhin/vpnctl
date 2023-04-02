@@ -30,6 +30,8 @@ class VPN:
             self.endpoint = self.add_peer(endpoint=endpoint)
 
     def __repr__(self):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         return f"VPN(peers={repr(self.peers)}, left_in_pool={len(self.pool.unallocated_addresses)})"
 
     def add_peer(self, address=None, endpoint=False):
@@ -42,6 +44,8 @@ class VPN:
         return peer
 
     def remove_peer(self, address=None):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         try:
             if address is None:
                 peer = self.peers.pop()
@@ -59,6 +63,8 @@ class VPN:
             raise e
 
     def to_json(self):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         json_dict = {
             "peers": [],
             "pool": {
