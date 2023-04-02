@@ -2,6 +2,8 @@ import ipaddress
 
 class Pool(ipaddress.IPv4Network):
     def __init__(self, address_space: str, hosts_num: int = 0, *args, **kwargs):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         try:
             super().__init__(address_space, *args, **kwargs)
             if hosts_num == 0:
@@ -16,6 +18,8 @@ class Pool(ipaddress.IPv4Network):
             raise e
 
     def __repr__(self) -> str:
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         try:
             return (
                 f"Pool("
@@ -29,6 +33,8 @@ class Pool(ipaddress.IPv4Network):
             raise e
     
     def _sort_spaces(self):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         try:
             self.allocated_addresses.sort()
             self.unallocated_addresses.sort()
@@ -36,6 +42,8 @@ class Pool(ipaddress.IPv4Network):
             raise e
 
     def relocate_address(func):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         def wrapper(self, address: ... = None):
             try:
                 if address is None:
@@ -63,6 +71,8 @@ class Pool(ipaddress.IPv4Network):
 
     @relocate_address
     def allocate_address(self, address=None):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         try:
             if address is None:
                 if not self.unallocated_addresses:
@@ -78,6 +88,8 @@ class Pool(ipaddress.IPv4Network):
 
     @relocate_address
     def unallocate_address(self, address=None):
+        #TODO implement memory friendly mechanism for address allocation
+        #TODO refactor unallocated_addresses from list to generator for cases when bitmask of the network is less than 24 
         try:
             if address is None:
                 if not self.allocated_addresses:
