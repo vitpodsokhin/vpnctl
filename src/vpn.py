@@ -1,4 +1,5 @@
 import ipaddress
+import json
 from pool import Pool
 
 class VPN:
