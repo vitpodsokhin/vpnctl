@@ -1,5 +1,5 @@
 import ipaddress
-from .pool import Pool
+from pool import Pool
 
 class VPN:
     class Peer:
