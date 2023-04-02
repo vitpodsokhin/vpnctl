@@ -1,16 +1,15 @@
 import ipaddress
 
 class Pool(ipaddress.IPv4Network):
-    def __init__(self, address_space: ipaddress.IPv4Network, hosts_num: int = 0, *args, **kwargs):
+    def __init__(self, address_space: str, hosts_num: int = 0, *args, **kwargs):
         try:
             super().__init__(address_space, *args, **kwargs)
-            self.hosts_list = list(self.hosts())
             if hosts_num == 0:
-                self.unallocated_addresses = self.hosts_list[:]
+                self.unallocated_addresses = list(self.hosts())
                 self.allocated_addresses = []
-            elif hosts_num <= len(list(self.hosts())):
-                self.allocated_addresses = self.hosts_list[:hosts_num]
-                self.unallocated_addresses = self.hosts_list[hosts_num:]
+            elif hosts_num <= self.num_addresses:
+                self.allocated_addresses = list(self.hosts())[:hosts_num]
+                self.unallocated_addresses = list(self.hosts())[hosts_num:]
             else:
                 raise ValueError(f"Error: The number of requested hosts ({hosts_num}) exceeds the number of available hosts in the address space ({len(self.hosts_list)}).")
         except ValueError as e:
@@ -20,7 +19,7 @@ class Pool(ipaddress.IPv4Network):
         try:
             return (
                 f"Pool("
-                f"total={len(self.hosts_list)}, "
+                f"total={self.num_addresses-2}, "
                 f"left={len(self.unallocated_addresses)}, "
                 f"allocated_addresses={[str(a) for a in self.allocated_addresses]}, "
                 f"unallocated_addresses={[str(a) for a in self.unallocated_addresses]}"
