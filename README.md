@@ -8,28 +8,10 @@ This project is a Python implementation of a VPN address space manager that allo
 
 The VPN Manager consists of two main classes:
 
-1.   `` Pool ``: A class for managing IP addresses allocated to network peers.
-2.   `` VPN ``: A class for managing VPN peers and their routes.
+1.   `` VPN ``: A class for managing VPN peers and their routes.
+2.   `` Pool ``: A class for managing IP addresses allocated to network peers.
 
 The features of each class are described below.
-
-### Pool
-
-The `` Pool `` class is a subclass of the `` IPv4Network `` class from the `` ipaddress `` module. It manages IP addresses allocated to network peers.
-
-#### Initialization
-
-The `` Pool `` class can be initialized with the following arguments:
-
-*   `` address_space ``: An `` IPv4Network `` object representing the network address space.
-*   `` hosts_num `` (optional): An integer representing the number of hosts to be allocated. If set to 0 (default), all available hosts will be allocated.
-
-#### Methods
-
-The `` Pool `` class provides the following methods:
-
-*   `` allocate_address(address=None) ``: Allocates an IP address from the pool. If `` address `` is not provided, the first unallocated IP address will be allocated.
-*   `` unallocate_address(address=None) ``: Frees an allocated IP address. If `` address `` is not provided, the last allocated IP address will be freed.
 
 ### VPN
 
@@ -79,6 +61,24 @@ The `` VPN `` class provides the following methods:
 *   `` remove_peer(address=None) ``: Removes a VPN peer from the network. If `` address `` is not provided, the last added peer will be removed.
 *   `` Router ``: A subclass of `` Peer `` representing a VPN router.
 *   `` Peer ``: A class representing a VPN peer.
+
+### Pool
+
+The `` Pool `` class is a subclass of the `` IPv4Network `` class from the `` ipaddress `` module. It manages IP addresses allocated to network peers.
+
+#### Initialization
+
+The `` Pool `` class can be initialized with the following arguments:
+
+*   `` address_space ``: An `` IPv4Network `` object representing the network address space.
+*   `` hosts_num `` (optional): An integer representing the number of hosts to be allocated. If set to 0 (default), all available hosts will be allocated.
+
+#### Methods
+
+The `` Pool `` class provides the following methods:
+
+*   `` allocate_address(address=None) ``: Allocates an IP address from the pool. If `` address `` is not provided, the first unallocated IP address will be allocated.
+*   `` unallocate_address(address=None) ``: Frees an allocated IP address. If `` address `` is not provided, the last allocated IP address will be freed.
 
 ## TODO:
 

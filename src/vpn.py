@@ -1,31 +1,27 @@
-'''
-This is a Python script that defines a VPN class, which contains a Peer and a Router inner classes.
-The Peer class has an address attribute (an IPv4Address object),
-  an is_router attribute (a boolean value indicating whether the peer is a router),
-  and an optional endpoint attribute (also an IPv4Address object)
-  that indicates the endpoint address of the peer if it is a router.
-
-The Router class inherits from the Peer class and has an additional vpn attribute,
-which is a reference to the VPN object that the router belongs to.
-
-The VPN class has an address_space attribute (an IPv4Network object)
-  that represents the range of IP addresses available for the VPN,
-  a pool attribute (a Pool object) that represents the pool of available IP addresses,
-  an endpoints attribute (a list of strings)
-  that represents the endpoint addresses of all the routers in the VPN,
-  and a peers attribute (a list of Peer objects)
-  that represents all the peers (routers and non-routers) in the VPN.
-
-The VPN class has methods for adding and removing peers from the VPN,
-  as well as a to_json method that returns a JSON string representing the VPN object
-  and a from_json class method that creates a VPN object from a JSON string.
-'''
+# This is a Python script that defines a VPN class, which contains a Peer and a Router inner classes.
 
 import ipaddress, json
-from pool import Pool
+from .pool import Pool
 
 class VPN:
+    '''The VPN class has an address_space attribute (an IPv4Network object)
+    that represents the range of IP addresses available for the VPN,
+    a pool attribute (a Pool object) that represents the pool of available IP addresses,
+    an endpoints attribute (a list of strings)
+    that represents the endpoint addresses of all the routers in the VPN,
+    and a peers attribute (a list of Peer objects)
+    that represents all the peers (routers and non-routers) in the VPN.
+
+    The VPN class has methods for adding and removing peers from the VPN,
+    as well as a to_json method that returns a JSON string representing the VPN object
+    and a from_json class method that creates a VPN object from a JSON string.'''
+
     class Peer:
+        '''The Peer class has an address attribute (an IPv4Address object),
+        an is_router attribute (a boolean value indicating whether the peer is a router),
+        and an optional endpoint attribute (also an IPv4Address object)
+        that indicates the endpoint address of the peer if it is a router.'''
+
         def __init__(self, address=None, endpoint=False, is_router=False):
             self.address = ipaddress.IPv4Address(address)
             self.is_router = is_router
@@ -41,6 +37,9 @@ class VPN:
                 return f"Peer(address='{self.address}')"
 
     class Router(Peer):
+        '''The Router class inherits from the Peer class and has an additional vpn attribute,
+        which is a reference to the VPN object that the router belongs to.'''
+
         def __init__(self, vpn, address=None, endpoint=False):
             super().__init__(address, endpoint, True)
             self.vpn = vpn
@@ -54,7 +53,10 @@ class VPN:
             self.add_peer(endpoint=endpoint)
 
     def __repr__(self):
-        return f"VPN(network={self.network}, endpoints={self.endpoints}, peers={repr(self.peers)}, left_in_pool={len(self.pool.unallocated_addresses)})"
+        return (
+            f"VPN(network={self.network}, endpoints={self.endpoints}, "
+            f"left_in_pool={len(self.pool.unallocated_addresses)}, peers={repr(self.peers)})"
+        )
 
     def add_peer(self, address=None, endpoint=False):
         if address is not None:
@@ -84,6 +86,14 @@ class VPN:
                         break
         except (ValueError, IndexError) as e:
             raise e
+
+    @property
+    def peer_count(self):
+        return len(self.peers)
+
+    @property
+    def router_count(self):
+        return sum(1 for peer in self.peers if peer.is_router)
 
     def to_json(self):
         json_dict = {
