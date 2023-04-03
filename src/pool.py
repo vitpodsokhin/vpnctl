@@ -2,7 +2,18 @@ import ipaddress
 
 class Pool(ipaddress.IPv4Network):
     '''The Pool is a low-level class for the address space allocation functionality.'''
+
     def __init__(self, address_space: str, hosts_num: int = 0, *args, **kwargs):
+        '''Create a new Pool object.
+
+        Args:
+            address_space (str): The IP address space to use for the pool.
+            hosts_num (int, optional): The number of hosts to allocate initially. Defaults to 0.
+
+        Raises:
+            ValueError: If hosts_num exceeds the number of available hosts in the address space.
+        '''
+        
         super().__init__(address_space, *args, **kwargs)
         if hosts_num == 0:
             self.unallocated_addresses = list(self.hosts())
@@ -28,8 +39,31 @@ class Pool(ipaddress.IPv4Network):
         self.allocated_addresses.sort()
         self.unallocated_addresses.sort()
 
+    @staticmethod
     def relocate_address(func):
+        '''Decorator for allocating or unallocating an address.
+
+        Args:
+            func (function): The function to decorate.
+
+        Returns:
+            function: The decorated function.
+        '''
+        
         def wrapper(self, address: ... = None):
+            '''Allocate or unallocate an address.
+
+            Args:
+                address (IPv4Address, optional): The address to allocate or unallocate. Defaults to None.
+
+            Raises:
+                IndexError: If there are no more unallocated addresses available or no more allocated addresses available to unallocate.
+                ValueError: If the address is not available for allocation or not allocated for unallocation.
+
+            Returns:
+                IPv4Address: The allocated or unallocated address.
+            '''
+
             if address is None:
                 if func.__name__ == 'allocate_address':
                     if not self.unallocated_addresses:
