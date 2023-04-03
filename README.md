@@ -83,12 +83,3 @@ The `` Pool `` class provides the following methods:
 ## TODO:
 
 *   Cover objects initialization, modification and regeneration with unittests.
-*   Implement a method to connect a peer to the VPN.
-*   Implement a method to disconnect a peer from the VPN.
-*   Implement a method to list all peers and their status (connected or not).
-*   Implement error handling for cases where the VPN pool runs out of addresses to allocate.
-*   Add logging functionality to track VPN usage and errors.
-*   Implement unit tests to ensure the correct behavior of the VPN and its components.
-
-
-
