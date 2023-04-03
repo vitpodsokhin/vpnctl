@@ -1,6 +1,6 @@
 import ipaddress
 import json
-from tkinter import N
+
 from pool import Pool
 
 class VPN:
