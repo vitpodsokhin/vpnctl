@@ -1,6 +1,4 @@
-import ipaddress
-import json
-
+import ipaddress, json
 from pool import Pool
 
 class VPN:
@@ -24,24 +22,16 @@ class VPN:
             super().__init__(address, endpoint, True)
             self.vpn = vpn
 
-    def __init__(self, address_space, endpoint=False, peers_amount=0):
+    def __init__(self, address_space, endpoint=False):
         self.pool: Pool = Pool(address_space)
         self.network: str = self.pool.exploded
+        self.endpoints = []
         self.peers = []
         if endpoint:
             self.add_peer(endpoint=endpoint)
-        if 0 < peers_amount < 2**(32-self.pool._prefixlen)-3:
-            for _ in range(peers_amount):
-                self.add_peer()
-        else:
-            print(f'other works! {peers_amount}')
 
     def __repr__(self):
-        return (
-            f"VPN(network={self.network}, left_in_pool={len(self.pool.unallocated_addresses)}, "
-            f"endpoints={[str(peer.endpoint) for peer in self.peers if peer.endpoint is not None]}, "
-            f"peers={repr(self.peers)})"
-        )
+        return f"VPN(network={self.network}, endpoints={self.endpoints}, peers={repr(self.peers)}, left_in_pool={len(self.pool.unallocated_addresses)})"
 
     def add_peer(self, address=None, endpoint=False):
         if address is not None:
@@ -50,6 +40,8 @@ class VPN:
                 raise ValueError(f"Error: Address {address} is already allocated.")
         peer = self.Peer(self.pool.allocate_address(address), endpoint=endpoint)
         self.peers.append(peer)
+        if peer.is_router:
+            self.endpoints.append(peer.endpoint.exploded)
         return peer
 
     def remove_peer(self, address=None):
@@ -65,6 +57,7 @@ class VPN:
                     if peer.address == address:
                         self.pool.unallocate_address(address)
                         self.peers.remove(peer)
+                        self.endpoints.remove(peer.endpoint)
                         break
         except (ValueError, IndexError) as e:
             raise e
