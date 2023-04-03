@@ -1,3 +1,26 @@
+'''
+This is a Python script that defines a VPN class, which contains a Peer and a Router inner classes.
+The Peer class has an address attribute (an IPv4Address object),
+  an is_router attribute (a boolean value indicating whether the peer is a router),
+  and an optional endpoint attribute (also an IPv4Address object)
+  that indicates the endpoint address of the peer if it is a router.
+
+The Router class inherits from the Peer class and has an additional vpn attribute,
+which is a reference to the VPN object that the router belongs to.
+
+The VPN class has an address_space attribute (an IPv4Network object)
+  that represents the range of IP addresses available for the VPN,
+  a pool attribute (a Pool object) that represents the pool of available IP addresses,
+  an endpoints attribute (a list of strings)
+  that represents the endpoint addresses of all the routers in the VPN,
+  and a peers attribute (a list of Peer objects)
+  that represents all the peers (routers and non-routers) in the VPN.
+
+The VPN class has methods for adding and removing peers from the VPN,
+  as well as a to_json method that returns a JSON string representing the VPN object
+  and a from_json class method that creates a VPN object from a JSON string.
+'''
+
 import ipaddress, json
 from pool import Pool
 
