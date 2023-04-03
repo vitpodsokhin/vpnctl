@@ -1,3 +1,4 @@
+tests/
 *.test*.*
 .DS_Store
 *.ipynb
