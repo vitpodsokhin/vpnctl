@@ -64,9 +64,6 @@ class Pool(ipaddress.IPv4Network):
             self.allocated_addresses.append(address)
             self._sort_spaces()
             return address
-        else:
-            return address
-
 
     @relocate_address
     def unallocate_address(self, address=None):
@@ -76,6 +73,4 @@ class Pool(ipaddress.IPv4Network):
             address = self.allocated_addresses.pop(-1)
             self.unallocated_addresses.append(address)
             self._sort_spaces()
-            return address
-        else:
             return address
