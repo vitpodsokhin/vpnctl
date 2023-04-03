@@ -13,8 +13,8 @@ class Pool(ipaddress.IPv4Network):
                 self.unallocated_addresses = list(self.hosts())
                 self.allocated_addresses = []
             elif hosts_num <= self.num_addresses:
-                self.allocated_addresses = list(self.hosts())[:hosts_num]
-                self.unallocated_addresses = list(self.hosts())[hosts_num:]
+                self.allocated_addresses = self.hosts()[:hosts_num]
+                self.unallocated_addresses = self.hosts()[hosts_num:]
             else:
                 raise ValueError(
                     f"Error: The number of requested hosts ({hosts_num}) exceeds "
