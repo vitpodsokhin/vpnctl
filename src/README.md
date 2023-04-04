@@ -54,40 +54,40 @@ The `` VPN `` class represents a virtual private network. It contains a list of 
 
 ## Constructor
 
-### `` __init__(self, network: Optional[Union[IPv4Network, str]] = None, endpoint: Optional[str] = None) ->; None ``
+* `` __init__(self, network: Optional[Union[IPv4Network, str]] = None, endpoint: Optional[str] = None) ->; None ``
 
 Initializes a new `` VPN `` object. If a network is specified, it creates a pool with that network. If an endpoint is specified, it adds a peer with that endpoint.
 
 ## Methods
 
-### `` __repr__(self) ->; str ``
+* `` __repr__(self) ->; str ``
 
 Returns a string representation of the `` VPN `` object.
 
-### `` endpoints(self) ->; List[str] ``
+* `` endpoints(self) ->; List[str] ``
 
 Returns a list of endpoint addresses for all the router peers in the VPN.
 
-### `` add_peer(self, address: Optional[Union[IPv4Address, str]] = None, endpoint: Optional[IPv4Address] = None) ->; BasePeer ``
+* `` add_peer(self, address: Optional[Union[IPv4Address, str]] = None, endpoint: Optional[IPv4Address] = None) ->; BasePeer ``
 
 Adds a new peer to the VPN. If an address is specified, it allocates that address from the VPN's pool. If an endpoint is specified, it creates a router peer with that endpoint.
 
-### `` remove_peer(self, address: Optional[IPv4Address] = None) ->; None ``
+* `` remove_peer(self, address: Optional[IPv4Address] = None) ->; None ``
 
 Removes a peer from the VPN. If an address is specified, it removes the peer with that address. Otherwise, it removes the last peer in the list.
 
-### `` to_json(self) ->; str ``
+* `` to_json(self) ->; str ``
 
 Returns a JSON string representation of the `` VPN `` object.
 
-### `` from_json(cls, json_str: str) ->; 'VPN' ``
+* `` from_json(cls, json_str: str) ->; 'VPN' ``
 
 Creates a new `` VPN `` object from a JSON string.
 
-### `` print_config(self, file_path: Optional[str] = None) ->; Optional[str] ``
+* `` print_config(self, file_path: Optional[str] = None) ->; Optional[str] ``
 
 Prints the VPN configuration in INI file format. If a file\_path is specified, it writes the configuration to that file instead.
 
-### `` from_config(cls, config_str: str) ->; 'VPN' ``
+* `` from_config(cls, config_str: str) ->; 'VPN' ``
 
 Creates a new `` VPN `` object from an INI file configuration string.
