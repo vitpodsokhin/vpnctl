@@ -1,6 +1,8 @@
 ## AI suggestitions to be implemented:
 
-# VPNManager (https://github.com/vitpodsokhin/devops/blob/main/utils/vpnctl.py#L216)
+# VPNManager
+
+* (https://github.com/vitpodsokhin/devops/blob/main/utils/vpnctl.py#L216)
 
 This is a Python class `` VPNManager `` that manages a list of `` VPN `` objects. It provides methods for creating, deleting, listing, and saving/loading VPNs to/from INI and JSON files.
 
