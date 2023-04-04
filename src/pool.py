@@ -15,6 +15,9 @@ class Pool(ipaddress.IPv4Network):
         '''
         
         super().__init__(address_space, *args, **kwargs)
+        #TODO implement `generator` feature solution
+        # like this one https://github.com/vitpodsokhin/devops/blob/main/utils/vpnctl.py#L68
+        # instead of slicing and saving lists
         if hosts_num == 0:
             self.unallocated_addresses = list(self.hosts())
             self.allocated_addresses = []
